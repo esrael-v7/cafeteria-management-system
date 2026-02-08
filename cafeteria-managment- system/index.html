@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cafeteria Management System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  <link rel="stylesheet" href="cafeteria.css">
+
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<div id="authOverlay" class="auth hidden">
+
+  <div class="auth-box">
+
+    
+    <div class="auth-left"></div>
+
+    
+    <div class="auth-right">
+
+      <h2 id="authTitle">Welcome</h2>
+      <p id="authSubtitle">Login to your account</p>
+
+      <select id="roleSelect">
+        <option value="customer">Customer</option>
+        <option value="admin">Admin</option>
+      </select>
+       
+      <input id="authUser" type="text" placeholder="Username">
+      <input id="authPass" type="password" placeholder="Password">
+
+      <label class="remember">
+      <input type="checkbox" id="rememberMe">
+      <span>Remember me</span>
+      </label>
+
+
+      <button id="loginBtnAuth" onclick="submitAuth()">Login</button>
+      <button id="registerBtnAuth" class="hidden" onclick="registerUser()">Register</button>
+      
+      
+      <p class="auth-switch">
+        
+        <span onclick="switchAuth('register')">Register</span>
+      </p>
+
+      <p class="auth-switch hidden" id="loginSwitch">
+       
+        <span onclick="switchAuth('login')">Login</span>
+      </p>
+
+      
+
+    </div>
+  </div>
+</div>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+  <div class="logo">
+    <i class="fa-solid fa-mug-hot"></i>
+    <span>Cafeteria</span>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search food or drinks...">
+  </div>
+
+  <nav class="nav">
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('menu')">Menu</a>
+    <a onclick="showPage('about')">About Us</a>
+    <a onclick="showPage('cart')">
+      Cart <span id="cartCount">0</span>
+    </a>
+    <a onclick="openLogin()" id="loginBtn">Login</a>
+    <a onclick="logout()" id="logoutBtn" style="display:none;">Logout</a>
+
+  </nav>
+</header>
+
+<!-- ================= HOME PAGE ================= -->
+<section id="home" class="page active">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Fresh Food • Hot Coffee • Fast Service</h1>
+      <p>Enjoy delicious meals and drinks every day</p>
+      <div class="hero-buttons">
+        <button onclick="showPage('menu')">View Menu</button>
+        <button class="outline" onclick="showPage('menu')">Order Now</button>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="image/Which coffee mug and accessory combo is your perfect caf setup_.jpg" alt="Food">
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <h2 class="section-title">Categories</h2>
+  <div class="category-card" onclick="showPage('menu'); scrollToCategory('regularFoods')">🍔 Foods</div>
+  <div class="category-card" onclick="showPage('menu'); scrollToCategory('hotDrinks')">☕️ Drinks</div>
+  <div class="category-card" onclick="showPage('menu'); scrollToCategory('desserts')">🍰 Desserts</div>
+
+  <!-- BEST SELLERS -->
+  <h2 class="section-title">Best Sellers</h2>
+  <div class="best-sellers">
+    <div class="item-card" onclick="goToItem('Burger')">Cheese Burger</div>
+   <div class="item-card" onclick="goToItem('Cappuccino')">Cappuccino</div>
+   <div class="item-card" onclick="goToItem('Chocolate Cake')">Chocolate Cake</div>
+
+  </div>
+
+  <!-- WHY CHOOSE US -->
+  <h2 class="section-title">Why Choose Us</h2>
+  <div class="why-us">
+    <div>🌱 Fresh Ingredients</div>
+    <div>⚡ Fast Service</div>
+    <div>💰 Affordable Price</div>
+  </div>
+
+  <!-- OPENING HOURS -->
+  <h2 class="section-title">Opening Hours</h2>
+  <p class="center-text">Monday – Sunday : 7:00 AM – 10:00 PM</p>
+
+  <!-- REVIEWS -->
+  <h2 class="section-title">Customer Reviews</h2>
+  <div class="reviews">
+    <div>⭐⭐⭐⭐⭐ Amazing food and coffee</div>
+    <div>⭐⭐⭐⭐ Fast delivery and service</div>
+    <div>⭐⭐⭐⭐⭐ Best cafeteria in town</div>
+  </div>
+
+</section>
+
+<!-- ================= ABOUT PAGE (FIXED: WAS MISSING) ================= -->
+<section id="about" class="page">
+  <h1 class="page-title">About Us</h1>
+  <p class="center-text">
+    Our cafeteria serves fresh meals, hot drinks, and delicious desserts every day.
+    We focus on quality, hygiene, and fast service for all customers.
+  </p>
+</section>
+
+<!-- ================= MENU PAGE ================= -->
+<section id="menu" class="page">
+
+  <h1 class="page-title">Our Menu</h1>
+
+  <!-- FOODS -->
+  <h2>Foods</h2>
+
+  <h3>Regular Foods</h3>
+  <div class="menu-grid" id="regularFoods"></div>
+
+  <h3>Fast Foods</h3>
+  <div class="menu-grid" id="fastFoods"></div>
+
+  <h3>Desserts</h3>
+  <div class="menu-grid" id="desserts"></div>
+
+  <!-- DRINKS -->
+  <h2>Drinks</h2>
+
+  <h3>Hot Drinks</h3>
+  <div class="menu-grid" id="hotDrinks"></div>
+
+  <h3>Cold Drinks</h3>
+  <div class="menu-grid" id="coldDrinks"></div>
+
+</section>
+
+<!-- ================= CART PAGE ================= -->
+<section id="cart" class="page">
+
+  <h1 class="page-title">Your Cart</h1>
+
+  <div id="cartItems"></div>
+
+  <div class="cart-summary">
+    <p>Subtotal: <span id="subtotal">0</span> ETB</p>
+    <p>Tax (15%): <span id="tax">0</span> ETB</p>
+    <h3>Total: <span id="total">0</span> ETB</h3>
+    <button onclick="showPage('checkout')">Checkout</button>
+  </div>
+
+</section>
+
+<!-- ================= CHECKOUT PAGE ================= -->
+<section id="checkout" class="page">
+
+  <h1 class="page-title">Checkout</h1>
+
+  <form id="checkoutForm">
+
+    <h3>Order Type</h3>
+    <select id="orderType">
+      <option>Dine-in</option>
+      <option>Takeaway</option>
+      <option>Delivery</option>
+    </select>
+
+    <h3>Customer Info</h3>
+    <input type="text" placeholder="Full Name" required>
+    <input type="tel" placeholder="Phone Number" required>
+    <input type="number" placeholder="Table Number (Dine-in only)">
+
+    <h3>Payment Method</h3>
+    <div class="payment-methods">
+      <label><input type="radio" name="payment" value="Cash"> Cash</label>
+      <label><input type="radio" name="payment" value="Telebirr"> Telebirr</label>
+      <label><input type="radio" name="payment" value="CBE"> CBE</label>
+      <label><input type="radio" name="payment" value="Abyssinia"> Abyssinia</label>
+      <label><input type="radio" name="payment" value="Card"> Card</label>
+
+    </div>
+
+    <button type="button" onclick="placeOrder()">Confirm Order</button>
+
+
+  </form>
+
+</section>
+
+<!-- ================= ADMIN LOGIN ================= -->
+<section id="adminLogin" class="page">
+
+  <h1 class="page-title">Staff Login</h1>
+
+  <form id="adminLoginForm">
+    <input type="text" placeholder="Username" required>
+    <input type="password" placeholder="Password" required>
+    <select>
+      <option>Admin</option>
+      <option>Cashier</option>
+      <option>Kitchen Staff</option>
+    </select>
+    <button type="submit">Login</button>
+  </form>
+
+</section>
+
+<!-- ================= ADMIN DASHBOARD ================= -->
+<section id="admin" class="page">
+
+  <h1 class="page-title">Admin Dashboard</h1>
+
+  <div class="dashboard-cards">
+  <div class="card" id="totalOrders">
+    Total Orders Today<br><b>0</b>
+  </div>
+
+  <div class="card" id="totalRevenue">
+    Total Revenue<br><b>0 ETB</b>
+  </div>
+
+  <div class="card" id="pendingOrders">
+    Pending Orders<br><b>0</b>
+  </div>
+
+  <div class="card" id="completedOrders">
+    Completed Orders<br><b>0</b>
+  </div>
+</div>
+
+
+  <h2>Manage Menu</h2>
+  <div id="adminMenuList"></div>
+
+  <h2>Manage Orders</h2>
+  <div id="adminOrders"></div>
+
+</section>
+
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+
+  <div class="footer-content">
+
+    <div class="footer-left">
+      <h3>☕ Cafeteria</h3>
+      <p>Addis Ababa, Ethiopia</p>
+    </div>
+
+    <div class="footer-center">
+      <p>Phone: +251 9XX XXX XXX</p>
+      <p>Email: info@cafeteria.com</p>
+      <p>© 2025 Cafeteria Management System</p>
+    </div>
+
+    <div class="footer-right social-links">
+      <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://t.me" target="_blank"><i class="fab fa-telegram"></i></a>
+      <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+    </div>
+
+  </div>
+
+ 
+</footer>
+
+
+<!-- ================= JS ================= -->
+<script src="cafeteria.js"></script>
+</body>
+</html>
